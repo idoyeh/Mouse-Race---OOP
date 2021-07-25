@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Mouse Race</title>
+    <script src="../lib/jquery.js"></script>
+    <link href="../lib/w3.css" rel="stylesheet" />
+    <link href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+    <script src="Element.js"></script>
+    <script src="Chase.js"></script>
+    <script src="Escape.js"></script>
+    <script src="Random.js"></script>
+    <script src="Score.js"></script>
+    <script src="Cursor.js"></script>
+    <script src="Game.js"></script>
+
+    <style>
+        body {
+            background-color: #8fcf63;
+            margin: 0px;
+            padding: 0px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 40px auto;
+            font-size: 50px;
+            color: red;
+            background-color: cornflowerblue;
+            opacity: 0.5;
+            position: relative;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 10px auto;
+            font-size: 30px;
+        }
+
+        canvas {
+            margin: 5px auto;
+            border: 2px solid lightslategray;
+            box-shadow: black 7px 5px 10px;
+        }
+
+        #cursor {
+            position: absolute;
+            border: 2px solid black;
+            height: 20px;
+            width: 20px;
+            background-color: red;
+            box-sizing: border-box;
+            transition: 0.1s;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        #score {
+            margin-left: -300px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 30%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s
+        }
+
+        /* Add Animation */
+        @-webkit-keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        @keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        .modal-header {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .modal-body {
+            padding: 16px 16px;
+        }
+
+        .modal-footer {
+            padding: 8px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
+    </style>
+
+
+</head>
+<body dir="rtl">
+    <h1>Mouse Race</h1>
+    <div id="cursor"></div>
+    <span id="score">score: 0</span>
+    <canvas id="game" width="400" height="400"></canvas>
+
+    <!-- The Modal Start -->
+    <div id="modal-start" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>בחר סוג משחק:</h2>
+            </div>
+            <div class="modal-body">
+                <input type="radio" id="chase_btn" name="type_player" value="chase" checked>
+                <label for="chase">chase</label>
+                <br>
+                <input type="radio" id="escape_btn" name="type_player" value="escape">
+                <label for="escape">escape</label>
+                <br>
+                <input type="radio" id="random_btn" name="type_player" value="random">
+                <label for="random">random</label>
+            </div>
+            <div class="modal-footer">
+                <button id="btn_type_player_chose" type="button">התחל</button>
+                <div id="err_text"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- The Modal End -->
+    <div id="modal-end" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>סוף המשחק!</h2>
+            </div>
+            <div class="modal-body">
+                <span id="display_score"></span>
+                <label for="display_score"></label>
+            </div>
+            <div class="modal-footer">
+                <button id="btn_new_game" type="button">התחל משחק חדש</button>
+                <div id="err_text"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- The Modal Round -->
+    <div id="modal-round" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>המשך לשחק - 3 סיבובים סה"כ:</h2>
+            </div>
+            <div class="modal-body">
+                <span id="display_round"></span>
+                <label for="display_round"></label>
+            </div>
+        </div>
+
+    </div>
+
+    <!--//////////////////////////////////////////////////////////////-->
+    <!--//////////////////////////////////////////////////////////////-->
+    <!--///////////////////////// script /////////////////////////////-->
+    <!--//////////////////////////////////////////////////////////////-->
+    <!--//////////////////////////////////////////////////////////////-->
+    <script>
+
+        $(document).ready(function () {
+            // When the user clicks the button, open the modal
+            $("#modal-start").css("display", "block");
+        });
+
+        var canvas = document.getElementById("game");
+        var ctx = canvas.getContext("2d");
+
+        var game = new Game();
+        game.start();
+
+        let speed = 4;
+        let tileCount = 20;
+        let tileSize = canvas.width / tileCount;
+        let step = 20;
+        let isLimit = false;
+        let isFirstTime = true;
+        let isStart = false;
+        let isStop = false;
+        let num;
+        let round = 0;
+        let element;
+
+        let leftElement, topElement;
+        var cancel = 0, cancelGame = 0;
+
+        function init() {
+            leftElement = element.randomPosition();
+            topElement = element.randomPosition();
+        }
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+C:\Users\Ido Yehezkel\Desktop\Mouse Race Ido Yehezkel\ClassLibrary\bin\Debug\ClassLibrary.dll
+C:\Users\Ido Yehezkel\Desktop\Mouse Race Ido Yehezkel\ClassLibrary\bin\Debug\ClassLibrary.pdb
+C:\Users\Ido Yehezkel\Desktop\Mouse Race Ido Yehezkel\ClassLibrary\obj\Debug\ClassLibrary.csprojAssemblyReference.cache
+C:\Users\Ido Yehezkel\Desktop\Mouse Race Ido Yehezkel\ClassLibrary\obj\Debug\ClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\Ido Yehezkel\Desktop\Mouse Race Ido Yehezkel\ClassLibrary\obj\Debug\ClassLibrary.dll
+C:\Users\Ido Yehezkel\Desktop\Mouse Race Ido Yehezkel\ClassLibrary\obj\Debug\ClassLibrary.pdb
