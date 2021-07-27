@@ -10,10 +10,10 @@
 ✔	random - Moving in a straight line. When it hits the edge of the screen, it changes direction randomly. When an element touches the mouse the game is over.
 
 <br/>
-- The player has a score that appears on the screen. It goes up by 1 every second.
-- At any given moment, an element moves in a logic determined by its type.
-- When you click the "Start" button in the center of the screen, all elements appear in random places.
-- An element must not be out of the confines of the screen.
+- The player has a score that appears on the screen. It goes up by 1 every second.<br/>
+- At any given moment, an element moves in a logic determined by its type.<br/>
+- When you click the "Start" button in the center of the screen, all elements appear in random places.<br/>
+- An element must not be out of the confines of the screen.<br/>
 
 # Example
 
